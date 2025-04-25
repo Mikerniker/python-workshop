@@ -93,56 +93,56 @@ def main() -> None:
         f"\nView it on Lora at https://lora.algokit.io/localnet/asset/{created_asset}."
     )
 
-    # # -------------------------------- Step 5 -------------------------------- #
-    # # Get ASA information from algod's /v2/assets REST API endpoint
-    # # The response will contain all of the asset's current parameters
-    # asset_info = algorand.asset.get_by_id(created_asset)
-    # print(
-    #     f"\nAsset information from algod's /v2/assets/{{asset-id}} REST API endpoint: {asset_info}."
-    # )
-    # print(
-    #     "\nLearn about and explore the algod REST API at https://dev.algorand.co/reference/rest-api/overview/#algod-rest-endpoints."
-    # )
+    # -------------------------------- Step 5 -------------------------------- #
+    # Get ASA information from algod's /v2/assets REST API endpoint
+    # The response will contain all of the asset's current parameters
+    asset_info = algorand.asset.get_by_id(created_asset)
+    print(
+        f"\nAsset information from algod's /v2/assets/{{asset-id}} REST API endpoint: {asset_info}."
+    )
+    print(
+        "\nLearn about and explore the algod REST API at https://dev.algorand.co/reference/rest-api/overview/#algod-rest-endpoints."
+    )
 
-    # # -------------------------------- Step 6 -------------------------------- #
-    # # Bob opts in to the ASA so that he will be able to hold it
-    # bob_opt_in_result = algorand.send.asset_opt_in(
-    #     AssetOptInParams(
-    #         sender=bob.address,
-    #         asset_id=created_asset,
-    #     )
-    # )
-    # print(
-    #     f"\nAsset opt-in transaction confirmed with TxnID: {bob_opt_in_result.tx_id}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{bob_opt_in_result.tx_id}."
-    # )
+    # -------------------------------- Step 6 -------------------------------- #
+    # Bob opts in to the ASA so that he will be able to hold it
+    bob_opt_in_result = algorand.send.asset_opt_in(
+        AssetOptInParams(
+            sender=bob.address,
+            asset_id=created_asset,
+        )
+    )
+    print(
+        f"\nAsset opt-in transaction confirmed with TxnID: {bob_opt_in_result.tx_id}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{bob_opt_in_result.tx_id}."
+    )
 
-    # # -------------------------------- Step 7 -------------------------------- #
-    # # Alice sends some of the ASA to Bob
-    # send_asset_result = algorand.send.asset_transfer(
-    #     AssetTransferParams(
-    #         sender=alice.address,
-    #         receiver=bob.address,
-    #         asset_id=created_asset,
-    #         amount=3_000_000,  # The amount is in the smallest unit of the asset
-    #         note=b"Have a few of my first ASA!",
-    #     )
-    # )
-    # print(
-    #     f"\nAsset transfer transaction confirmed with TxnID: {send_asset_result.tx_id}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{send_asset_result.tx_id}."
-    # )
+    # -------------------------------- Step 7 -------------------------------- #
+    # Alice sends some of the ASA to Bob
+    send_asset_result = algorand.send.asset_transfer(
+        AssetTransferParams(
+            sender=alice.address,
+            receiver=bob.address,
+            asset_id=created_asset,
+            amount=3_000_000,  # The amount is in the smallest unit of the asset
+            note=b"Have a few of my first ASA!",
+        )
+    )
+    print(
+        f"\nAsset transfer transaction confirmed with TxnID: {send_asset_result.tx_id}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{send_asset_result.tx_id}."
+    )
 
-    # # -------------------------------- Step 8 -------------------------------- #
-    # # Get Bob's account information
-    # # This will include all of the current ledger state for Bob's account,
-    # # including Algo balance, asset balances with some asset information,
-    # # as well as application-related information like local state, and more.
-    # bob_account_info = algorand.account.get_information(bob.address)
-    # print(
-    #     f"\nBob's account information from algod's /v2/accounts/{{address}} REST API endpoint: \n{bob_account_info}."
-    # )
-    # print(
-    #     "\nLearn about and explore the algod REST API at https://dev.algorand.co/reference/rest-api/overview/#algod-rest-endpoints."
-    # )
+    # -------------------------------- Step 8 -------------------------------- #
+    # Get Bob's account information
+    # This will include all of the current ledger state for Bob's account,
+    # including Algo balance, asset balances with some asset information,
+    # as well as application-related information like local state, and more.
+    bob_account_info = algorand.account.get_information(bob.address)
+    print(
+        f"\nBob's account information from algod's /v2/accounts/{{address}} REST API endpoint: \n{bob_account_info}."
+    )
+    print(
+        "\nLearn about and explore the algod REST API at https://dev.algorand.co/reference/rest-api/overview/#algod-rest-endpoints."
+    )
 
     # # -------------------------------- Step 9 -------------------------------- #
     # # Build an atomic transaction group with two transactions

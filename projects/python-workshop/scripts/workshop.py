@@ -173,30 +173,30 @@ def main() -> None:
         f"\nAtomic transaction group confirmed with first TxnID: {group_result.tx_ids[0]}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{group_result.tx_ids[0]}."
     )
 
-    # # -------------------------------- Step 10 -------------------------------- #
-    # # Search the indexer for the asset transfer transactions
-    # # We add a short delay here because indexer can be a bit slow on LocalNet.
-    # # Engineering will be working on improving this in the future.
-    # print(
-    #     "\nSleeping for 30 seconds to let the LocalNet indexer to catch up, which can sometimes take a moment."
-    # )
-    # sleep(30)
+    # -------------------------------- Step 10 -------------------------------- #
+    # Search the indexer for the asset transfer transactions
+    # We add a short delay here because indexer can be a bit slow on LocalNet.
+    # Engineering will be working on improving this in the future.
+    print(
+        "\nSleeping for 30 seconds to let the LocalNet indexer to catch up, which can sometimes take a moment."
+    )
+    sleep(30)
 
-    # # Here the AlgorandClient exposes the underlying SDK indexer client to build
-    # # the query with various parameters. Be mindful of how broad the query is
-    # # to avoid long-running requests or needing to page through many results.
-    # transfer_search_results = algorand.client.indexer.search_transactions(
-    #     asset_id=created_asset,
-    #     txn_type="axfer",
-    # )
-    # found_txn_ids = [txn["id"] for txn in transfer_search_results["transactions"]]
-    # print(
-    #     f"\nAsset transfer transaction IDs found by searching the indexer: {found_txn_ids}."
-    # )
-    # print(
-    #     "\nLearn about and explore the indexer REST API at https://dev.algorand.co/reference/rest-api/overview/#indexer-rest-endpoints."
-    # )
-    # print("🙌 Congrats on interacting with the Algorand chain with Python!")
+    # Here the AlgorandClient exposes the underlying SDK indexer client to build
+    # the query with various parameters. Be mindful of how broad the query is
+    # to avoid long-running requests or needing to page through many results.
+    transfer_search_results = algorand.client.indexer.search_transactions(
+        asset_id=created_asset,
+        txn_type="axfer",
+    )
+    found_txn_ids = [txn["id"] for txn in transfer_search_results["transactions"]]
+    print(
+        f"\nAsset transfer transaction IDs found by searching the indexer: {found_txn_ids}."
+    )
+    print(
+        "\nLearn about and explore the indexer REST API at https://dev.algorand.co/reference/rest-api/overview/#indexer-rest-endpoints."
+    )
+    print("🙌 Congrats on interacting with the Algorand chain with Python!")
 
 
 if __name__ == "__main__":

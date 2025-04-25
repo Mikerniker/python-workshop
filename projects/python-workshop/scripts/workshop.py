@@ -144,34 +144,34 @@ def main() -> None:
         "\nLearn about and explore the algod REST API at https://dev.algorand.co/reference/rest-api/overview/#algod-rest-endpoints."
     )
 
-    # # -------------------------------- Step 9 -------------------------------- #
-    # # Build an atomic transaction group with two transactions
-    # # Utils provides this fluent way of chaining method calls to build the group
-    # # rather than using the SDK to create transactions and manually group them.
-    # # These transactions will be either confirmed or rejected together.
-    # group_result = (
-    #     algorand.send.new_group()
-    #     .add_payment(
-    #         PaymentParams(
-    #             sender=bob.address,
-    #             receiver=alice.address,
-    #             amount=AlgoAmount(algo=1),
-    #             note=b"Thanks, Alice!",
-    #         )
-    #     )
-    #     .add_asset_transfer(
-    #         AssetTransferParams(
-    #             sender=bob.address,
-    #             receiver=alice.address,
-    #             asset_id=created_asset,
-    #             amount=1_000_000,
-    #             note=b"Sending back one of your token!",
-    #         )
-    #     )
-    # ).send()
-    # print(
-    #     f"\nAtomic transaction group confirmed with first TxnID: {group_result.tx_ids[0]}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{group_result.tx_ids[0]}."
-    # )
+    # -------------------------------- Step 9 -------------------------------- #
+    # Build an atomic transaction group with two transactions
+    # Utils provides this fluent way of chaining method calls to build the group
+    # rather than using the SDK to create transactions and manually group them.
+    # These transactions will be either confirmed or rejected together.
+    group_result = (
+        algorand.send.new_group()
+        .add_payment(
+            PaymentParams(
+                sender=bob.address,
+                receiver=alice.address,
+                amount=AlgoAmount(algo=1),
+                note=b"Thanks, Alice!",
+            )
+        )
+        .add_asset_transfer(
+            AssetTransferParams(
+                sender=bob.address,
+                receiver=alice.address,
+                asset_id=created_asset,
+                amount=1_000_000,
+                note=b"Sending back one of your token!",
+            )
+        )
+    ).send()
+    print(
+        f"\nAtomic transaction group confirmed with first TxnID: {group_result.tx_ids[0]}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{group_result.tx_ids[0]}."
+    )
 
     # # -------------------------------- Step 10 -------------------------------- #
     # # Search the indexer for the asset transfer transactions

@@ -49,49 +49,49 @@ def main() -> None:
 
     # -------------------------------- Step 3 -------------------------------- #
     # Alice sends an Algo payment transaction to Bob
-    # pay_result = algorand.send.payment(
-    #     PaymentParams(
-    #         sender=alice.address,
-    #         receiver=bob.address,
-    #         amount=AlgoAmount(
-    #             algo=2
-    #         ),  # The AlgoAmount class is a helper to be explicit about amounts between microAlgos and Algos
-    #         note=b"Hi, Bob!",
-    #     )
-    # )
-    # print(
-    #     f"\nPay transaction confirmed with TxnID: {pay_result.tx_id}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{pay_result.tx_id}."
-    # )
+    pay_result = algorand.send.payment(
+        PaymentParams(
+            sender=alice.address,
+            receiver=bob.address,
+            amount=AlgoAmount(
+                algo=2
+            ),  # The AlgoAmount class is a helper to be explicit about amounts between microAlgos and Algos
+            note=b"Hi, Bob!",
+        )
+    )
+    print(
+        f"\nPay transaction confirmed with TxnID: {pay_result.tx_id}. \nView it on Lora at https://lora.algokit.io/localnet/transaction/{pay_result.tx_id}."
+    )
 
     # # -------------------------------- Step 4 -------------------------------- #
     # # Alice creates an Algorand Standard Asset (ASA)
     # # See the docs to learn which parameters are (im)mutable:
     # # https://dev.algorand.co/concepts/assets/overview/
-    # create_asset_result = algorand.send.asset_create(
-    #     AssetCreateParams(
-    #         sender=alice.address,
-    #         asset_name="My First ASA",  # A human-readable name for the asset
-    #         unit_name="MFA",  # A short ticker; this is not a unique identifier
-    #         total=1_000_000_000_000,  # The true supply of indivisible units
-    #         decimals=6,  # Used for displaying the asset amount off chain
-    #         default_frozen=False,  # This asset can be transferred freely
-    #         manager=alice.address,  # Account that can change the asset's config
-    #         reserve=alice.address,  # Account to hold non-circulating supply
-    #         freeze=alice.address,  # Account that can freeze asset holdings
-    #         clawback=alice.address,  # Account that can revoke asset holdings
-    #         url="https://algorand.co/algokit",  # Often used to point to metadata
-    #         note=b"This is my first Algorand Standard Asset!",
-    #     )
-    # )
-    # # Store the Asset ID Alice created in a variable for later use in the script
-    # # This UInt64 Asset ID is a unique identifier for the asset on the chain
-    # created_asset = create_asset_result.asset_id
-    # print(
-    #     f"\nAsset ID {created_asset} create transaction confirmed with TxnID: {create_asset_result.tx_id}."
-    # )
-    # print(
-    #     f"\nView it on Lora at https://lora.algokit.io/localnet/asset/{created_asset}."
-    # )
+    create_asset_result = algorand.send.asset_create(
+        AssetCreateParams(
+            sender=alice.address,
+            asset_name="My First ASA",  # A human-readable name for the asset
+            unit_name="MFA",  # A short ticker; this is not a unique identifier
+            total=1_000_000_000_000,  # The true supply of indivisible units
+            decimals=6,  # Used for displaying the asset amount off chain
+            default_frozen=False,  # This asset can be transferred freely
+            manager=alice.address,  # Account that can change the asset's config
+            reserve=alice.address,  # Account to hold non-circulating supply
+            freeze=alice.address,  # Account that can freeze asset holdings
+            clawback=alice.address,  # Account that can revoke asset holdings
+            url="https://algorand.co/algokit",  # Often used to point to metadata
+            note=b"This is my first Algorand Standard Asset!",
+        )
+    )
+    # Store the Asset ID Alice created in a variable for later use in the script
+    # This UInt64 Asset ID is a unique identifier for the asset on the chain
+    created_asset = create_asset_result.asset_id
+    print(
+        f"\nAsset ID {created_asset} create transaction confirmed with TxnID: {create_asset_result.tx_id}."
+    )
+    print(
+        f"\nView it on Lora at https://lora.algokit.io/localnet/asset/{created_asset}."
+    )
 
     # # -------------------------------- Step 5 -------------------------------- #
     # # Get ASA information from algod's /v2/assets REST API endpoint

@@ -50,3 +50,40 @@ def personal_bank_client(
         dispenser_account=dispenser,
     )
     return client   
+
+
+def test_deposit(
+    algorand_client: AlgorandClient,
+    depositor: SigningAccount,
+    personal_bank_client: PersonalBankClient,
+) -> None:
+    pay_txn = algorand_client.create_transaction.payment(
+        PaymentParams(
+            sender=depositor.address,
+            receiver=personal_bank_client.app_address,
+            amount=AlgoAmount(algo=1),
+        )
+    )
+    result = personal_bank_client.send.deposit(
+        args=(DepositArgs(pay_txn=pay_txn)),
+        params=CommonAppCallParams(
+            sender=depositor.address, extra_fee=AlgoAmount(micro_algo=1000)    
+        ),
+    )
+    assert result.abi_return == 1000000
+
+
+def test_withdraw(
+    depositor: SigningAccount,
+    personal_bank_client: PersonalBankClient,
+) -> None:
+    print("test_withdraw")
+    result = personal_bank_client.send.withdraw(
+        params=CommonAppCallParams(
+           sender=depositor.address,
+           max_fee=AlgoAmount(micro_algo=3000),
+        ),
+        send_params=SendParams(cover_app_call_inner_transaction_fees=True),
+    )
+    print("result", result)
+    assert result.abi_return == 1000000

@@ -35,3 +35,6 @@ def deploy() -> None:
                 receiver=app_client.app_address,
             )
         )
+
+        
+    logger.info(f"Deployed app at app ID: {app_client.app_id}")

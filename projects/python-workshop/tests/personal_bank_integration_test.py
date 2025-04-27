@@ -1,4 +1,3 @@
-
 import pytest
 
 from algokit_utils import (
@@ -32,3 +31,22 @@ def depositor(algorand_client: AlgorandClient) -> SigningAccount:
         account_to_fund=account.address, min_spending_balance=AlgoAmount.from_algo(10)
     )
     return account
+
+
+
+@pytest.fixture(scope="session")
+def personal_bank_client(
+    algorand_client: AlgorandClient, deployer: SigningAccount) -> PersonalBankClient:
+    factory = algorand_client.client.get_typed_app_factory(
+        PersonalBankFactory, default_sender=deployer.address
+    )
+
+    client, _ = factory.send.create.bare()
+
+    dispenser = algorand_client.account.localnet_dispenser()
+    algorand_client.account.ensure_funded(
+        account_to_fund=client.app_address,
+        min_spending_balance=AlgoAmount.from_algo(1),
+        dispenser_account=dispenser,
+    )
+    return client   

@@ -1,3 +1,14 @@
+from collections.abc import Iterator
+import pytest
+from algopy_testing import AlgopyTestContext, algopy_testing_context
+from smart_contracts.personal_bank.contract import PersonalBank
+
+@pytest.fixture()
+def context() -> Iterator[AlgopyTestContext]:
+    with algopy_testing_context() as ctx:
+        yield ctx
+
+
 def test_deposit(context: AlgopyTestContext) -> None:
     #Arrange
     contract = PersonalBank

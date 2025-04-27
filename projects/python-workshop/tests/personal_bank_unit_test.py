@@ -21,3 +21,18 @@ def test_deposit(context: AlgopyTestContext) -> None:
 
     #Assert
     assert output == deposit_amount
+
+
+def test_withdraw(context: AlgopyTestContext) -> None:
+    #Arrange
+    contract = PersonalBank()
+    app = context.ledger.get_app(contract)
+    deposit_amount = context.any.uint64()
+    deposit_txn = context.any.txn.payment(receiver=app.address, amount=deposit_amount)
+
+    #Act
+    contract.deposit(pay_txn=deposit_txn)
+    output = contract.withdraw()
+
+    #Assert
+    assert output == deposit_amount

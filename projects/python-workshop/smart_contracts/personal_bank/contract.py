@@ -39,6 +39,9 @@ class PersonalBank(ARC4Contract):
         else:
             self.depositors[pay_txn.sender] = pay_txn.amount
 
+        # Store GitHub handle 
+        self.github.set("Mikerniker")
+
         return self.depositors[pay_txn.sender]
 
     @abimethod()

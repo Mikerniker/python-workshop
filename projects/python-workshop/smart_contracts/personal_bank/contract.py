@@ -1,4 +1,4 @@
-from algopy import Account, ARC4Contract, BoxMap, Global, Txn, UInt64, gtxn, itxn
+from algopy import Account, ARC4Contract, Box, BoxMap, Global, Txn, UInt64, gtxn, itxn
 from algopy.arc4 import abimethod
 
 
@@ -11,6 +11,8 @@ class PersonalBank(ARC4Contract):
         The BoxMap uses Account addresses as keys and UInt64 values to track deposited amounts.
         """
         self.depositors = BoxMap(Account, UInt64, key_prefix="")
+        self.github = Box(str, key="github")
+
 
     @abimethod()
     def deposit(self, pay_txn: gtxn.PaymentTransaction) -> UInt64:

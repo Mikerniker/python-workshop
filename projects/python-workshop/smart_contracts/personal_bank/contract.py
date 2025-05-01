@@ -78,3 +78,12 @@ class PersonalBank(ARC4Contract):
     @arc4.abimethod
     def get_github(self) -> arc4.String:
         return self.github.value
+
+
+    @arc4.abimethod
+    def exist_github_box(self) -> bool:
+        return bool(bool(self.github))
+
+    @arc4.abimethod
+    def key_box_example(self) -> None:
+        assert self.github.key == b"github_box", "box string key ok"

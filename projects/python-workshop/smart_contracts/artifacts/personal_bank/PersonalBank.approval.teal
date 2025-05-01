@@ -8,15 +8,46 @@ main:
     // smart_contracts/personal_bank/contract.py:5
     // class PersonalBank(ARC4Contract):
     txn NumAppArgs
-    bz main_bare_routing@8
-    pushbytess 0x3298e7c0 0x3a395f2b 0x3e130eda // method "deposit(pay)uint64", method "withdraw()uint64", method "get_github()string"
+    bz main_bare_routing@10
+    pushbytess 0x3298e7c0 0x3a395f2b 0x3e130eda 0xad82c2e7 0x7fa2d1c0 // method "deposit(pay)uint64", method "withdraw()uint64", method "get_github()string", method "exist_github_box()bool", method "key_box_example()void"
     txna ApplicationArgs 0
-    match main_deposit_route@5 main_withdraw_route@6 main_get_github_route@7
+    match main_deposit_route@5 main_withdraw_route@6 main_get_github_route@7 main_exist_github_box_route@8 main_key_box_example_route@9
 
-main_after_if_else@10:
+main_after_if_else@12:
     // smart_contracts/personal_bank/contract.py:5
     // class PersonalBank(ARC4Contract):
     intc_1 // 0
+    return
+
+main_key_box_example_route@9:
+    // smart_contracts/personal_bank/contract.py:87
+    // @arc4.abimethod
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+main_exist_github_box_route@8:
+    // smart_contracts/personal_bank/contract.py:83
+    // @arc4.abimethod
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    callsub exist_github_box
+    pushbytes 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
     return
 
 main_get_github_route@7:
@@ -82,11 +113,11 @@ main_deposit_route@5:
     intc_0 // 1
     return
 
-main_bare_routing@8:
+main_bare_routing@10:
     // smart_contracts/personal_bank/contract.py:5
     // class PersonalBank(ARC4Contract):
     txn OnCompletion
-    bnz main_after_if_else@10
+    bnz main_after_if_else@12
     txn ApplicationID
     !
     assert // can only call when creating
@@ -231,4 +262,14 @@ get_github:
     bytec_1 // 0x6769746875625f626f78
     box_get
     assert // check self.github exists
+    retsub
+
+
+// smart_contracts.personal_bank.contract.PersonalBank.exist_github_box() -> uint64:
+exist_github_box:
+    // smart_contracts/personal_bank/contract.py:85
+    // return bool(bool(self.github))
+    bytec_1 // 0x6769746875625f626f78
+    box_len
+    bury 1
     retsub

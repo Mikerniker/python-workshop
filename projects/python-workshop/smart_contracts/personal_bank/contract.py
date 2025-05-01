@@ -77,5 +77,4 @@ class PersonalBank(ARC4Contract):
     # @abimethod()
     @arc4.abimethod
     def get_github(self) -> arc4.String:
-        github = Box(arc4.String, key=b"github_box")
-        return github.value
+        return self.github.value

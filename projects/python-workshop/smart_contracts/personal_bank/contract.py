@@ -69,10 +69,6 @@ class PersonalBank(ARC4Contract):
 
         return result.amount
     
-    # @abimethod()
-    # def set_github(self, github_handle: arc4.String) -> None:
-    #     self.github.value = "Mikerniker"
-
     
     # @abimethod()
     @arc4.abimethod

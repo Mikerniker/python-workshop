@@ -20,7 +20,7 @@ main_after_if_else@12:
     return
 
 main_key_box_example_route@9:
-    // smart_contracts/personal_bank/contract.py:87
+    // smart_contracts/personal_bank/contract.py:83
     // @arc4.abimethod
     txn OnCompletion
     !
@@ -31,7 +31,7 @@ main_key_box_example_route@9:
     return
 
 main_exist_github_box_route@8:
-    // smart_contracts/personal_bank/contract.py:83
+    // smart_contracts/personal_bank/contract.py:79
     // @arc4.abimethod
     txn OnCompletion
     !
@@ -51,7 +51,7 @@ main_exist_github_box_route@8:
     return
 
 main_get_github_route@7:
-    // smart_contracts/personal_bank/contract.py:77-78
+    // smart_contracts/personal_bank/contract.py:73-74
     // # @abimethod()
     // @arc4.abimethod
     txn OnCompletion
@@ -257,7 +257,7 @@ withdraw:
 
 // smart_contracts.personal_bank.contract.PersonalBank.get_github() -> bytes:
 get_github:
-    // smart_contracts/personal_bank/contract.py:80
+    // smart_contracts/personal_bank/contract.py:76
     // return self.github.value
     bytec_1 // 0x6769746875625f626f78
     box_get
@@ -267,7 +267,7 @@ get_github:
 
 // smart_contracts.personal_bank.contract.PersonalBank.exist_github_box() -> uint64:
 exist_github_box:
-    // smart_contracts/personal_bank/contract.py:85
+    // smart_contracts/personal_bank/contract.py:81
     // return bool(bool(self.github))
     bytec_1 // 0x6769746875625f626f78
     box_len

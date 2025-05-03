@@ -11,11 +11,10 @@ class PersonalBank(ARC4Contract):
         The BoxMap uses Account addresses as keys and UInt64 values to track deposited amounts.
         """
         self.depositors = BoxMap(Account, UInt64, key_prefix="")
-        self.github = Box(arc4.String, key=b"github_box")
+        self.github = Box(arc4.String, key=b"github")
         
 
-    @arc4.abimethod
-    # @abimethod()
+    @abimethod()
     def deposit(self, pay_txn: gtxn.PaymentTransaction) -> UInt64:
         """Deposits funds into the personal bank
 
@@ -70,16 +69,16 @@ class PersonalBank(ARC4Contract):
         return result.amount
     
     
-    # @abimethod()
-    @arc4.abimethod
+    @abimethod()
     def get_github(self) -> arc4.String:
         return self.github.value
 
-
-    @arc4.abimethod
+   
+    @abimethod()
     def exist_github_box(self) -> bool:
         return bool(bool(self.github))
 
-    @arc4.abimethod
+
+    @abimethod()
     def key_box_example(self) -> None:
-        assert self.github.key == b"github_box", "box string key ok"
+        assert self.github.key == b"github", "box string key ok"

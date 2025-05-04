@@ -127,6 +127,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+projects/python-workshop/.algokit/generators/create_env_file/.env.testnet
 
 # Spyder project settings
 .spyderproject

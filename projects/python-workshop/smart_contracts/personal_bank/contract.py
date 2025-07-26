@@ -15,7 +15,7 @@ class PersonalBank(ARC4Contract):
         
 
     @abimethod()
-    def deposit(self, pay_txn: gtxn.PaymentTransaction) -> tuple[UInt64, arc4.String]:
+    def deposit(self, pay_txn: gtxn.PaymentTransaction, github: arc4.String) -> UInt64:
         """Deposits funds into the personal bank
 
         This method accepts a payment transaction and records the deposit amount in the sender's BoxMap.

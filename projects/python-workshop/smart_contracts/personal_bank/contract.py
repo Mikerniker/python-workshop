@@ -40,10 +40,9 @@ class PersonalBank(ARC4Contract):
             self.depositors[pay_txn.sender] = pay_txn.amount
 
         # Store GitHub handle 
-        self.box_string = Box(arc4.String, key=b"BOX_C")
         self.github.value = arc4.String("Mikerniker")
  
-        return self.depositors[pay_txn.sender]
+        return self.depositors[pay_txn.sender], self.github.value
 
     @abimethod()
     def withdraw(self) -> UInt64:

@@ -36,6 +36,19 @@ def deploy() -> None:
             )
         )
 
-        
+        # TO REVIEW
+        # app_client.call(
+        #     method="deposit",
+        #     args=DepositArgs(
+        #         pay_txn=algorand.transactions.payment(
+        #             sender=deployer_.address,
+        #             receiver=app_client.app_address,
+        #             amount=AlgoAmount(algo=1),
+        #         ),
+        #         github="Mikerniker", 
+        #     ),
+        # )
+
+     
     logger.info(f"Deployed app at app ID: {app_client.app_id}")
 

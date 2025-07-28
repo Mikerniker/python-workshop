@@ -4,12 +4,12 @@
 // smart_contracts.personal_bank.contract.PersonalBank.__algopy_entrypoint_with_init() -> uint64:
 main:
     intcblock 1 0
-    bytecblock 0x676974687562 0x151f7c75
+    bytecblock 0x151f7c75 0x676974687562
     // smart_contracts/personal_bank/contract.py:5
     // class PersonalBank(ARC4Contract):
     txn NumAppArgs
     bz main_bare_routing@10
-    pushbytess 0x1f9cca3d 0x3a395f2b 0x3e130eda 0xad82c2e7 0x7fa2d1c0 // method "deposit(string)void", method "withdraw()uint64", method "get_github()string", method "exist_github_box()bool", method "key_box_example()void"
+    pushbytess 0xd822ffef 0x3a395f2b 0x3e130eda 0xad82c2e7 0x7fa2d1c0 // method "deposit(pay,string)uint64", method "withdraw()uint64", method "get_github()string", method "exist_github_box()bool", method "key_box_example()void"
     txna ApplicationArgs 0
     match main_deposit_route@5 main_withdraw_route@6 main_get_github_route@7 main_exist_github_box_route@8 main_key_box_example_route@9
 
@@ -43,7 +43,7 @@ main_exist_github_box_route@8:
     intc_1 // 0
     uncover 2
     setbit
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -59,7 +59,7 @@ main_get_github_route@7:
     txn ApplicationID
     assert // can only call when not creating
     callsub get_github
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -76,7 +76,7 @@ main_withdraw_route@6:
     assert // can only call when not creating
     callsub withdraw
     itob
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -84,7 +84,7 @@ main_withdraw_route@6:
     return
 
 main_deposit_route@5:
-    // smart_contracts/personal_bank/contract.py:16
+    // smart_contracts/personal_bank/contract.py:27
     // @abimethod()
     txn OnCompletion
     !
@@ -93,10 +93,23 @@ main_deposit_route@5:
     assert // can only call when not creating
     // smart_contracts/personal_bank/contract.py:5
     // class PersonalBank(ARC4Contract):
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
     txna ApplicationArgs 1
-    // smart_contracts/personal_bank/contract.py:16
+    // smart_contracts/personal_bank/contract.py:27
     // @abimethod()
     callsub deposit
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
     intc_0 // 1
     return
 
@@ -112,22 +125,83 @@ main_bare_routing@10:
     return
 
 
-// smart_contracts.personal_bank.contract.PersonalBank.deposit(github: bytes) -> void:
+// smart_contracts.personal_bank.contract.PersonalBank.deposit(pay_txn: uint64, github: bytes) -> uint64:
 deposit:
-    // smart_contracts/personal_bank/contract.py:16-17
+    // smart_contracts/personal_bank/contract.py:27-28
     // @abimethod()
-    // def deposit(self, github: arc4.String) -> None:
-    proto 1 0
-    // smart_contracts/personal_bank/contract.py:21-22
+    // def deposit(self, pay_txn: gtxn.PaymentTransaction, github: arc4.String) -> UInt64:
+    proto 2 1
+    // smart_contracts/personal_bank/contract.py:41
+    // pay_txn.receiver == Global.current_application_address
+    frame_dig -2
+    gtxns Receiver
+    global CurrentApplicationAddress
+    ==
+    // smart_contracts/personal_bank/contract.py:40-42
+    // assert (
+    //     pay_txn.receiver == Global.current_application_address
+    // ), "Receiver must be the contract address"
+    assert // Receiver must be the contract address
+    // smart_contracts/personal_bank/contract.py:43
+    // assert pay_txn.amount > 0, "Deposit amount must be greater than zero"
+    frame_dig -2
+    gtxns Amount
+    dup
+    assert // Deposit amount must be greater than zero
+    // smart_contracts/personal_bank/contract.py:45
+    // deposit_amt, deposited = self.depositors.maybe(pay_txn.sender)
+    frame_dig -2
+    gtxns Sender
+    dup
+    box_get
+    bury 1
+    // smart_contracts/personal_bank/contract.py:47
+    // if deposited:
+    bz deposit_else_body@2
+    // smart_contracts/personal_bank/contract.py:48
+    // self.depositors[pay_txn.sender] += pay_txn.amount
+    frame_dig 1
+    dup
+    box_get
+    swap
+    btoi
+    swap
+    assert // check self.depositors entry exists
+    frame_dig 0
+    +
+    itob
+    box_put
+
+deposit_after_if_else@3:
+    // smart_contracts/personal_bank/contract.py:52-53
     // # Store GitHub handle
     // self.github.value = github
-    bytec_0 // 0x676974687562
+    bytec_1 // 0x676974687562
     box_del
     pop
-    bytec_0 // 0x676974687562
+    bytec_1 // 0x676974687562
     frame_dig -1
     box_put
+    // smart_contracts/personal_bank/contract.py:56
+    // return self.depositors[pay_txn.sender]
+    frame_dig 1
+    box_get
+    swap
+    btoi
+    swap
+    assert // check self.depositors entry exists
+    frame_bury 0
     retsub
+
+deposit_else_body@2:
+    // smart_contracts/personal_bank/contract.py:50
+    // self.depositors[pay_txn.sender] = pay_txn.amount
+    frame_dig 0
+    itob
+    frame_dig 1
+    swap
+    box_put
+    b deposit_after_if_else@3
 
 
 // smart_contracts.personal_bank.contract.PersonalBank.withdraw() -> uint64:
@@ -185,7 +259,7 @@ withdraw:
 get_github:
     // smart_contracts/personal_bank/contract.py:84
     // return self.github.value
-    bytec_0 // 0x676974687562
+    bytec_1 // 0x676974687562
     box_get
     assert // check self.github exists
     retsub
@@ -195,7 +269,7 @@ get_github:
 exist_github_box:
     // smart_contracts/personal_bank/contract.py:89
     // return bool(bool(self.github))
-    bytec_0 // 0x676974687562
+    bytec_1 // 0x676974687562
     box_len
     bury 1
     retsub

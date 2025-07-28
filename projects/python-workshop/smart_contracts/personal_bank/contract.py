@@ -13,47 +13,36 @@ class PersonalBank(ARC4Contract):
         self.depositors = BoxMap(Account, UInt64, key_prefix="")
         self.github = Box(arc4.String, key=b"github")
         
+
     @abimethod()
-    def deposit(self, github: arc4.String) -> None:
-        """Create Github Box 
+    def deposit(self, pay_txn: gtxn.PaymentTransaction, github: arc4.String) -> UInt64:
+        """Deposits funds into the personal bank
+
+        This method accepts a payment transaction and records the deposit amount in the sender's BoxMap.
+        If the sender already has a deposit, the amount is added to their existing balance.
+
+        Args:
+            pay_txn: The payment transaction containing deposit information
+
+        Returns:
+            The total amount deposited by the sender after this transaction (as UInt64)
         """
+        assert (
+            pay_txn.receiver == Global.current_application_address
+        ), "Receiver must be the contract address"
+        assert pay_txn.amount > 0, "Deposit amount must be greater than zero"
+
+        deposit_amt, deposited = self.depositors.maybe(pay_txn.sender)
+
+        if deposited:
+            self.depositors[pay_txn.sender] += pay_txn.amount
+        else:
+            self.depositors[pay_txn.sender] = pay_txn.amount
 
         # Store GitHub handle 
         self.github.value = github
-        # self.github.value = arc4.String("Mikerniker")
        
-        
-
-    # @abimethod()
-    # def deposit(self, pay_txn: gtxn.PaymentTransaction, github: arc4.String) -> UInt64:
-    #     """Deposits funds into the personal bank
-
-    #     This method accepts a payment transaction and records the deposit amount in the sender's BoxMap.
-    #     If the sender already has a deposit, the amount is added to their existing balance.
-
-    #     Args:
-    #         pay_txn: The payment transaction containing deposit information
-
-    #     Returns:
-    #         The total amount deposited by the sender after this transaction (as UInt64)
-    #     """
-    #     assert (
-    #         pay_txn.receiver == Global.current_application_address
-    #     ), "Receiver must be the contract address"
-    #     assert pay_txn.amount > 0, "Deposit amount must be greater than zero"
-
-    #     deposit_amt, deposited = self.depositors.maybe(pay_txn.sender)
-
-    #     if deposited:
-    #         self.depositors[pay_txn.sender] += pay_txn.amount
-    #     else:
-    #         self.depositors[pay_txn.sender] = pay_txn.amount
-
-    #     # Store GitHub handle 
-    #     self.github.value = github
-    #     # self.github.value = arc4.String("Mikerniker")
-       
-    #     return self.depositors[pay_txn.sender]
+        return self.depositors[pay_txn.sender]
 
     @abimethod()
     def withdraw(self) -> UInt64:
